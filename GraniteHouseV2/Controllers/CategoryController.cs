@@ -19,5 +19,22 @@ namespace GraniteHouseV2.Controllers
             IEnumerable<Category> categories = _db.Category;
             return View(categories);
         }
+
+        //GET - CREATE
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        //POST - CREATE
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(Category category)
+        {
+            _db.Category.Add(category);
+            _db.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
     }
 }
