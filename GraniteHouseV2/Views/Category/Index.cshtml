@@ -32,7 +32,16 @@
                     <tr>
                         <td width="50%">@item.Name</td>
                         <td width="30%">@item.DisplayOrder</td>
-                        <td width="20%"></td>
+                        <td width="20%">
+                            <div class="w-75 btn-group" role="group">
+                                <a asp-controller="Category" asp-route-Id="@item.CategoryId" asp-action="Edit" class="btn btn-primary">
+                                    Edit
+                                </a>
+                                <a asp-controller="Category" asp-route-Id="@item.CategoryId" asp-action="Delete" class="btn btn-danger">
+                                    Delete
+                                </a>
+                            </div>
+                        </td>
                     </tr>
                 }
             </tbody>
