@@ -31,9 +31,71 @@ namespace GraniteHouseV2.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Category category)
         {
-            _db.Category.Add(category);
-            _db.SaveChanges();
+            if (ModelState.IsValid)
+            {
+                _db.Category.Add(category);
+                _db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(category);
+        }
 
+        //GET - EDIT
+        public IActionResult Edit(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+            var categoryObj = _db.Category.Find(id);
+            if (categoryObj == null)
+            {
+                return NotFound();
+            }
+            return View(categoryObj);
+        }
+
+        //POST - EDIT
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(Category category)
+        {
+            if (ModelState.IsValid)
+            {
+                _db.Category.Update(category);
+                _db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(category);
+        }
+
+        //GET - DELETE
+        public IActionResult Delete(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+            var categoryObj = _db.Category.Find(id);
+            if (categoryObj == null)
+            {
+                return NotFound();
+            }
+            return View(categoryObj);
+        }
+
+        //POST - DELETE
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteConfirmed(int? CategoryId)
+        {
+            var categoryObj = _db.Category.Find(CategoryId);
+            if (categoryObj == null)
+            {
+                return NotFound();
+            }
+            _db.Category.Remove(categoryObj);
+            _db.SaveChanges();
             return RedirectToAction("Index");
         }
     }
