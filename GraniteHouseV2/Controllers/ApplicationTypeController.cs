@@ -36,5 +36,62 @@ namespace GraniteHouseV2.Controllers
 
             return RedirectToAction("Index");
         }
+
+        // GET - EDIT
+        public IActionResult Edit(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+            var applicationTypeObj = _db.ApplicationType.Find(id);
+            if(applicationTypeObj == null)
+            {
+                return NotFound();
+            }
+            return View(applicationTypeObj);
+        }
+
+        // POST - EDIT
+        [HttpPost]
+        public IActionResult Edit(ApplicationType applicationType)
+        {
+            if (ModelState.IsValid)
+            {
+                _db.ApplicationType.Update(applicationType);
+                _db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(applicationType);
+        }
+
+        // GET - DELETE
+        public IActionResult Delete(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+            var applicationTypeObj = _db.ApplicationType.Find(id);
+            if (applicationTypeObj == null)
+            {
+                return NotFound();
+            }
+            return View(applicationTypeObj);
+        }
+
+        // POST - DELETE
+        [HttpPost]
+        public IActionResult DeleteConfirmed(int? applicationTypeId)
+        {
+            var applicationTypeObj = _db.ApplicationType.Find(applicationTypeId);
+            if (applicationTypeObj == null)
+            {
+                return NotFound();
+            }
+            _db.ApplicationType.Remove(applicationTypeObj);
+            _db.SaveChanges();
+            return RedirectToAction("Index");
+        }
     }
 }
