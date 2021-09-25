@@ -11,7 +11,7 @@
         </div>
         <div class="col-6 text-right">
             <a asp-controller="Category" asp-action="Create" class="btn btn-primary">
-                Create New Category
+                <i class="fas fa-plus"></i> &nbsp; New Category
             </a>
         </div>
     </div>
@@ -35,10 +35,10 @@
                         <td width="20%">
                             <div class="w-75 btn-group" role="group">
                                 <a asp-controller="Category" asp-route-Id="@item.CategoryId" asp-action="Edit" class="btn btn-primary">
-                                    Edit
+                                    <i class="fas fa-edit"></i>
                                 </a>
                                 <a asp-controller="Category" asp-route-Id="@item.CategoryId" asp-action="Delete" class="btn btn-danger">
-                                    Delete
+                                    <i class="far fa-trash-alt"></i>
                                 </a>
                             </div>
                         </td>
