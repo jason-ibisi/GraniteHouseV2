@@ -100,5 +100,19 @@
     @{
         <partial name="_ValidationScriptsPartial" />
     }
+
+<script type="text/javascript">
+    function validateForm() {
+        if (document.getElementById("files").value == "") {
+            Swal.fire(
+                'Error!',
+                'Please upload an image!',
+                'error'
+            )
+            return false;
+        }
+        return true;
+    }
+</script>
 }
 
