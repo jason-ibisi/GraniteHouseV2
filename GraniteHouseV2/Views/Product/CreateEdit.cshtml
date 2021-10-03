@@ -5,7 +5,8 @@
 }
 
 <form method="post" asp-action="CreateEdit" enctype="multipart/form-data">
-    @if (Model.Product.ProductId != 0) {
+    @if (Model.Product.ProductId != 0)
+    {
         ViewBag["Title"] = "Edit Product";
         <input asp-for="Product.ProductId" type="hidden" />
     }
@@ -31,7 +32,7 @@
                         <label asp-for="Product.Description"></label>
                     </div>
                     <div class="col-8">
-                        <input asp-for="Product.Description" class="form-control" />
+                        <textarea asp-for="Product.Description" class="form-control summernote"></textarea>
                         <span asp-validation-for="Product.Description" class="text-danger"></span>
                     </div>
 
@@ -101,18 +102,24 @@
         <partial name="_ValidationScriptsPartial" />
     }
 
-<script type="text/javascript">
-    function validateForm() {
-        if (document.getElementById("files").value == "") {
-            Swal.fire(
-                'Error!',
-                'Please upload an image!',
-                'error'
-            )
-            return false;
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.summernote').summernote({
+                height: 250
+            });
+        });
+
+        function validateForm() {
+            if (document.getElementById("files").value == "") {
+                Swal.fire(
+                    'Error!',
+                    'Please upload an image!',
+                    'error'
+                )
+                return false;
+            }
+            return true;
         }
-        return true;
-    }
-</script>
+    </script>
 }
 
