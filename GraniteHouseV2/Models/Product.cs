@@ -15,7 +15,6 @@ namespace GraniteHouseV2.Models
         [Required]
         [Range(1, int.MaxValue)]
         public double Price { get; set; }
-        [Required]
         public string Image { get; set; }
         [Display(Name = "Category Type")]
         public int CategoryId { get; set; }
