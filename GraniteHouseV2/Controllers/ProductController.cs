@@ -136,24 +136,45 @@ namespace GraniteHouseV2.Controllers
         }
 
         // GET: ProductController/Delete/5
-        public IActionResult Delete(int id)
+        public IActionResult Delete(int? id)
         {
-            return View();
+            if (id == null || id == 0 )
+            {
+                return NotFound();
+            }
+            Product product = _db.Product.Include(p => p.Category).Where(p => p.ProductId == id).FirstOrDefault();
+            if (product == null)
+            {
+                return NotFound();
+            }
+            return View(product);
         }
 
         // POST: ProductController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete(int id, IFormCollection collection)
+        public IActionResult DeleteConfirmed(int? productId)
         {
-            try
+            string webRootPath = _webHostEnvironment.WebRootPath;
+
+            var productObj = _db.Product.Find(productId);
+            if (productObj == null)
             {
-                return RedirectToAction(nameof(Index));
+                return NotFound();
             }
-            catch
+            _db.Product.Remove(productObj);
+            _db.SaveChanges();
+
+            // Remove image
+            string uploadPath = webRootPath + AppConstants.ImagePath;
+            var currentFilePath = Path.Combine(uploadPath, productObj.Image);
+
+            if (System.IO.File.Exists(currentFilePath))
             {
-                return View();
+                System.IO.File.Delete(currentFilePath);
             }
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }
