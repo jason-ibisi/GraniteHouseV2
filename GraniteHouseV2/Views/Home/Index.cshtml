@@ -6,10 +6,10 @@
 
 <div class="container">
     <div class="text-center">
-        <button class="btn btn-dark btn-filter" data-filer="all">All</button>
+        <button class="btn btn-dark btn-filter" data-filter="all">All</button>
         @foreach (var item in Model.Categories)
         {
-            <button class="btn btn-outline-secondary btn-filter" data-filer="@item.Name.Replace(' ', '_')">
+            <button class="btn btn-outline-secondary btn-filter" data-filter="@item.Name.Replace(' ', '_')">
                 @item.Name
             </button>
         }
@@ -17,7 +17,24 @@
     <div class="row pt-5">
         @foreach (var product in Model.Products)
         {
-            <partial name="_IndividualProductCard" model="product"/>
+            <partial name="_IndividualProductCard" model="product" />
         }
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('.btn-filter').click(function () {
+                var value = $(this).attr('data-filter');
+                if (value == "all") {
+                    $('.filter').show('1000');
+                }
+                else {
+                    $('.filter').not(`.${value}`).hide('3000');
+                    $('.filter').filter(`.${value}`).show('3000');
+                }
+            })
+        })
+    </script>
+}
