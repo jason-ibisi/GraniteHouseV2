@@ -27,7 +27,7 @@ namespace GraniteHouseV2.Controllers
         // GET: ProductController
         public IActionResult Index()
         {
-            IEnumerable<Product> productList = _db.Product.Include(x => x.Category);
+            IEnumerable<Product> productList = _db.Product.Include(x => x.Category).Include(a => a.ApplicationType);
 
             return View(productList);
         }
@@ -40,6 +40,10 @@ namespace GraniteHouseV2.Controllers
                 CategorySelectList = _db.Category.Select(i => new SelectListItem {
                     Text = i.Name,
                     Value = i.CategoryId.ToString()
+                }),
+                ApplicationTypeSelectList = _db.ApplicationType.Select(i => new SelectListItem { 
+                    Text = i.Name,
+                    Value = i.ApplicationTypeId.ToString()
                 })
             };
 
@@ -132,6 +136,12 @@ namespace GraniteHouseV2.Controllers
                 Value = i.CategoryId.ToString()
             });
 
+            productVM.ApplicationTypeSelectList = _db.ApplicationType.Select(i => new SelectListItem
+            {
+                Text = i.Name,
+                Value = i.ApplicationTypeId.ToString()
+            });
+
             return View(productVM);
         }
 
@@ -142,7 +152,8 @@ namespace GraniteHouseV2.Controllers
             {
                 return NotFound();
             }
-            Product product = _db.Product.Include(p => p.Category).Where(p => p.ProductId == id).FirstOrDefault();
+            Product product = _db.Product.Include(p => p.Category).Include(a => a.ApplicationType)
+                .Where(p => p.ProductId == id).FirstOrDefault();
             if (product == null)
             {
                 return NotFound();
