@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
+using System.Linq;
 
 namespace GraniteHouseV2.Controllers
 {
@@ -27,6 +28,17 @@ namespace GraniteHouseV2.Controllers
                 Categories = _db.Category
             };
             return View(homeVM);
+        }
+
+        public IActionResult Details(int id)
+        {
+            DetailsVM detailsVM = new DetailsVM()
+            {
+                Product = _db.Product.Include(x => x.Category).Include(x => x.ApplicationType)
+                    .Where(x => x.ProductId == id).FirstOrDefault(),
+                ExistsInCart = false
+            };
+            return View(detailsVM);
         }
 
         public IActionResult Privacy()
