@@ -10,6 +10,7 @@ namespace GraniteHouseV2.Models
         public int ProductId { get; set; }
         [Required]
         public string Name { get; set; }
+        public string ShortDesc { get; set; }
         [Required]
         public string Description { get; set; }
         [Required]
