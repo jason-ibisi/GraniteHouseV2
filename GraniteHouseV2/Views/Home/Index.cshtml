@@ -1,8 +1,23 @@
-﻿@{
+﻿@model GraniteHouseV2.Models.ViewModels.HomeVM
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container">
+    <div class="text-center">
+        <button class="btn btn-dark btn-filter" data-filer="all">All</button>
+        @foreach (var item in Model.Categories)
+        {
+            <button class="btn btn-outline-secondary btn-filter" data-filer="@item.Name.Replace(' ', '_')">
+                @item.Name
+            </button>
+        }
+    </div>
+    <div class="row pt-5">
+        @foreach (var product in Model.Products)
+        {
+            <partial name="_IndividualProductCard" model="product"/>
+        }
+    </div>
 </div>
