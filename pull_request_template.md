@@ -1,7 +1,7 @@
 ## Description
 <!--- Describe your changes in detail -->
 
-Fixes # (issue)
+### Fixes # (issue)
 
 ## Type of change
 <!--- What types of changes does your code introduce? Put an `x` in all the boxes that apply: -->
@@ -10,7 +10,7 @@ Fixes # (issue)
 - [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
 - [ ] This change requires a documentation update
 
-# Checklist:
+## Checklist:
 <!--- Put an `x` in all the boxes that apply: -->
 - [ ] My code follows the style guidelines of this project
 - [ ] I have performed a self-review of my own code
