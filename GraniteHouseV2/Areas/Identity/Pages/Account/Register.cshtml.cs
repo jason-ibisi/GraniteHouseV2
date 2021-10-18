@@ -94,7 +94,15 @@ namespace GraniteHouseV2.Areas.Identity.Pages.Account
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(user, AppConstants.AdminRole);
+                    if (User.IsInRole(AppConstants.AdminRole))
+                    {
+                        // an admin user has logged in and they try to create a new admin user
+                        await _userManager.AddToRoleAsync(user, AppConstants.AdminRole);
+                    }
+                    else
+                    {
+                        await _userManager.AddToRoleAsync(user, AppConstants.CustomerRole);
+                    }
 
                     _logger.LogInformation("User created a new account with password.");
 
