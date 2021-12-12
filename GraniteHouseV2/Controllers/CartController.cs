@@ -33,5 +33,25 @@ namespace GraniteHouseV2.Controllers
 
             return View(productsList);
         }
+
+        public IActionResult Remove(int id)
+        {
+            List<ShoppingCart> shoppingCartList = new List<ShoppingCart>();
+
+            // check if session contains shopping cart session
+            if (HttpContext.Session.Get<IEnumerable<ShoppingCart>>(AppConstants.SessionCart) != null
+                && HttpContext.Session.Get<IEnumerable<ShoppingCart>>(AppConstants.SessionCart).Count() > 0)
+            {
+                shoppingCartList = HttpContext.Session.Get<IEnumerable<ShoppingCart>>(AppConstants.SessionCart).ToList();
+            }
+
+            // Remove item from the session
+            shoppingCartList.Remove(shoppingCartList.FirstOrDefault(p => p.ProductId == id));
+
+            // Set session variable again
+            HttpContext.Session.Set(AppConstants.SessionCart, shoppingCartList);
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
