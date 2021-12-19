@@ -1,10 +1,12 @@
 ﻿using GraniteHouseV2.Data;
 using GraniteHouseV2.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
 namespace GraniteHouseV2.Controllers
 {
+    [Authorize(Roles = AppConstants.AdminRole)]
     public class ApplicationTypeController : Controller
     {
         private readonly ApplicationDbContext _db;
