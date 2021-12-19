@@ -1,6 +1,7 @@
 ﻿using GraniteHouseV2.Data;
 using GraniteHouseV2.Models;
 using GraniteHouseV2.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,7 @@ using System.Linq;
 
 namespace GraniteHouseV2.Controllers
 {
+    [Authorize(Roles = AppConstants.AdminRole)]
     public class ProductController : Controller
     {
         private readonly ApplicationDbContext _db;
