@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace GraniteHouseV2.Models
+namespace GraniteHouseV2_Models
 {
     public class ApplicationUser : IdentityUser
     {

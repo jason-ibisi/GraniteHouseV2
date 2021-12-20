@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace GraniteHouseV2.Models
+namespace GraniteHouseV2_Models
 {
     public class Product
     {

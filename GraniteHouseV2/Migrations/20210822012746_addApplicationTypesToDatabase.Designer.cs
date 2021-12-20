@@ -20,7 +20,7 @@ namespace GraniteHouseV2.Migrations
                 .HasAnnotation("ProductVersion", "5.0.9")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("GraniteHouseV2.Models.ApplicationType", b =>
+            modelBuilder.Entity("GraniteHouseV2_Models.ApplicationType", b =>
                 {
                     b.Property<int>("ApplicationTypeId")
                         .ValueGeneratedOnAdd()
@@ -35,7 +35,7 @@ namespace GraniteHouseV2.Migrations
                     b.ToTable("ApplicationType");
                 });
 
-            modelBuilder.Entity("GraniteHouseV2.Models.Category", b =>
+            modelBuilder.Entity("GraniteHouseV2_Models.Category", b =>
                 {
                     b.Property<int>("CategoryId")
                         .ValueGeneratedOnAdd()

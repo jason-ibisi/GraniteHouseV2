@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace GraniteHouseV2.Models
+namespace GraniteHouseV2_Models
 {
     public class ApplicationType
     {

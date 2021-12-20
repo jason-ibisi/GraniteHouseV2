@@ -1,5 +1,5 @@
 ﻿using GraniteHouseV2.Data;
-using GraniteHouseV2.Models;
+using GraniteHouseV2_Models;
 using GraniteHouseV2_Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

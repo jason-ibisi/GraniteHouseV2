@@ -21,7 +21,7 @@ namespace GraniteHouseV2.Migrations
                 .HasAnnotation("ProductVersion", "5.0.10")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("GraniteHouseV2.Models.ApplicationType", b =>
+            modelBuilder.Entity("GraniteHouseV2_Models.ApplicationType", b =>
                 {
                     b.Property<int>("ApplicationTypeId")
                         .ValueGeneratedOnAdd()
@@ -37,7 +37,7 @@ namespace GraniteHouseV2.Migrations
                     b.ToTable("ApplicationType");
                 });
 
-            modelBuilder.Entity("GraniteHouseV2.Models.Category", b =>
+            modelBuilder.Entity("GraniteHouseV2_Models.Category", b =>
                 {
                     b.Property<int>("CategoryId")
                         .ValueGeneratedOnAdd()
@@ -56,7 +56,7 @@ namespace GraniteHouseV2.Migrations
                     b.ToTable("Category");
                 });
 
-            modelBuilder.Entity("GraniteHouseV2.Models.Product", b =>
+            modelBuilder.Entity("GraniteHouseV2_Models.Product", b =>
                 {
                     b.Property<int>("ProductId")
                         .ValueGeneratedOnAdd()
@@ -301,7 +301,7 @@ namespace GraniteHouseV2.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("GraniteHouseV2.Models.ApplicationUser", b =>
+            modelBuilder.Entity("GraniteHouseV2_Models.ApplicationUser", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
@@ -311,15 +311,15 @@ namespace GraniteHouseV2.Migrations
                     b.HasDiscriminator().HasValue("ApplicationUser");
                 });
 
-            modelBuilder.Entity("GraniteHouseV2.Models.Product", b =>
+            modelBuilder.Entity("GraniteHouseV2_Models.Product", b =>
                 {
-                    b.HasOne("GraniteHouseV2.Models.ApplicationType", "ApplicationType")
+                    b.HasOne("GraniteHouseV2_Models.ApplicationType", "ApplicationType")
                         .WithMany()
                         .HasForeignKey("ApplicationTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GraniteHouseV2.Models.Category", "Category")
+                    b.HasOne("GraniteHouseV2_Models.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 
-namespace GraniteHouseV2.Models.ViewModels
+namespace GraniteHouseV2_Models.ViewModels
 {
     public class ProductVM
     {

@@ -1,4 +1,4 @@
-﻿namespace GraniteHouseV2.Models.ViewModels
+﻿namespace GraniteHouseV2_Models.ViewModels
 {
     public class DetailsVM
     {

@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\GraniteHouseV2_Models\GraniteHouseV2_Models.csproj" />
     <ProjectReference Include="..\GraniteHouseV2_Utility\GraniteHouseV2_Utility.csproj" />
   </ItemGroup>
 
