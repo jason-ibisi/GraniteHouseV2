@@ -1,4 +1,4 @@
-﻿namespace GraniteHouseV2.Utility
+﻿namespace GraniteHouseV2_Utility
 {
     public class MailJetProps
     {

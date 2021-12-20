@@ -1,5 +1,5 @@
 using GraniteHouseV2.Data;
-using GraniteHouseV2.Utility;
+using GraniteHouseV2_Utility;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;

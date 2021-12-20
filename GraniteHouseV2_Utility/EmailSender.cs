@@ -6,7 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
 
-namespace GraniteHouseV2.Utility
+namespace GraniteHouseV2_Utility
 {
     public class EmailSender : IEmailSender
     {

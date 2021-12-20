@@ -1,7 +1,7 @@
 ﻿using GraniteHouseV2.Data;
 using GraniteHouseV2.Models;
 using GraniteHouseV2.Models.ViewModels;
-using GraniteHouseV2.Utility;
+using GraniteHouseV2_Utility;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;

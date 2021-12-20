@@ -1,4 +1,4 @@
-﻿namespace GraniteHouseV2
+﻿namespace GraniteHouseV2_Utility
 {
     public class AppConstants
     {

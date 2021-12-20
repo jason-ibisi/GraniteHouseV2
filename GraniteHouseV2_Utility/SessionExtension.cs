@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.Text.Json;
 
-namespace GraniteHouseV2.Utility
+namespace GraniteHouseV2_Utility
 {
     public static class SessionExtension
     {
