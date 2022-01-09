@@ -1,7 +1,8 @@
 ﻿@page
 @model RegisterModel
-@if(User.IsInRole(GraniteHouseV2.AppConstants.AdminRole)){
+@using GraniteHouseV2_Utility 
 
+@if(User.IsInRole(AppConstants.AdminRole)) {
     ViewData["Title"] = "Register an Admin Account";
 }else {
     ViewData["Title"] = "Register";
@@ -40,7 +41,7 @@
                 <input asp-for="Input.ConfirmPassword" class="form-control" />
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
-            @if (User.IsInRole(GraniteHouseV2.AppConstants.AdminRole))
+            @if (User.IsInRole(AppConstants.AdminRole))
             {
                 <button type="submit" class="btn btn-warning">Register Admin User</button>
 

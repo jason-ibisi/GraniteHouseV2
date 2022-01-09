@@ -1,6 +1,7 @@
-﻿using GraniteHouseV2.Data;
-using GraniteHouseV2.Models;
-using GraniteHouseV2.Models.ViewModels;
+﻿using GraniteHouseV2_DataAccess;
+using GraniteHouseV2_Models;
+using GraniteHouseV2_Models.ViewModels;
+using GraniteHouseV2_Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
