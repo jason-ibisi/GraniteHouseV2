@@ -1,29 +1,30 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace GraniteHouseV2.Migrations
+namespace GraniteHouseV2_DataAccess.Migrations
 {
-    public partial class addApplicationTypesToDatabase : Migration
+    public partial class addCategoryToDatabase : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "ApplicationType",
+                name: "Category",
                 columns: table => new
                 {
-                    ApplicationTypeId = table.Column<int>(type: "int", nullable: false)
+                    CategoryId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DisplayOrder = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ApplicationType", x => x.ApplicationTypeId);
+                    table.PrimaryKey("PK_Category", x => x.CategoryId);
                 });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ApplicationType");
+                name: "Category");
         }
     }
 }

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace GraniteHouseV2.Data
+namespace GraniteHouseV2_DataAccess
 {
     public class ApplicationDbContext : IdentityDbContext
     {

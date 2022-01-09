@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace GraniteHouseV2.Migrations
+namespace GraniteHouseV2_DataAccess.Migrations
 {
     public partial class AddFullNameToUsersTable : Migration
     {

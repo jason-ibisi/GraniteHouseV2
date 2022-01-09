@@ -1,7 +1,7 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
+using System;
 
-namespace GraniteHouseV2.Migrations
+namespace GraniteHouseV2_DataAccess.Migrations
 {
     public partial class ScaffoldIdentity : Migration
     {
