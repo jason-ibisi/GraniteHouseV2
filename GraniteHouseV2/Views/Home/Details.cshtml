@@ -10,11 +10,11 @@
         <input asp-for="@Model.Product.ProductId" hidden />
         <div class="container backgroundWhite pt-4">
             <div class="card" style="border:1px solid #000000; ">
-                <div class="card-header bg-dark text-light ml-0 row container" style="border-radius: 0px;">
+                <div class="card-header bg-dark text-light m-auto row container" style="border-radius: 0px;">
                     <div class="col-12 col-md-6">
                         <h1 class="text-white">@Model.Product.Name</h1>
                     </div>
-                    <div class="col-12 col-md-6 text-md-right">
+                    <div class="col-12 col-md-6 text-end">
                         <h1 class="text-warning"> @((Model.Product.Price).ToString("c", new System.Globalization.CultureInfo("en-US")))</h1>
                     </div>
                 </div>
@@ -28,8 +28,8 @@
                                 <div class="row pl-3">
 
                                     <div class="col-12">
-                                        <span class="badge p-3 border" style="background-color:lavenderblush">@Model.Product.Category.Name</span>
-                                        <span class="badge p-3 border" style="background-color:azure">@Model.Product.ApplicationType.Name</span>
+                                        <span class="badge p-3 border text-dark" style="background-color:lavenderblush">@Model.Product.Category.Name</span>
+                                        <span class="badge p-3 border text-dark" style="background-color:azure">@Model.Product.ApplicationType.Name</span>
                                         <h3 class="text-success"></h3>
 
                                         <p class="text-secondary">@Html.Raw(Model.Product.Description)</p>
