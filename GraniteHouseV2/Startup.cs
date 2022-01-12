@@ -1,4 +1,6 @@
 using GraniteHouseV2_DataAccess;
+using GraniteHouseV2_DataAccess.Repository;
+using GraniteHouseV2_DataAccess.Repository.IRepository;
 using GraniteHouseV2_Utility;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -38,6 +40,7 @@ namespace GraniteHouseV2
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddControllersWithViews();
         }
 

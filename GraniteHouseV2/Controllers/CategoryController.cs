@@ -1,4 +1,4 @@
-﻿using GraniteHouseV2_DataAccess;
+﻿using GraniteHouseV2_DataAccess.Repository.IRepository;
 using GraniteHouseV2_Models;
 using GraniteHouseV2_Utility;
 using Microsoft.AspNetCore.Authorization;
@@ -10,16 +10,16 @@ namespace GraniteHouseV2.Controllers
     [Authorize(Roles = AppConstants.AdminRole)]
     public class CategoryController : Controller
     {
-        private readonly ApplicationDbContext _db;
+        private readonly ICategoryRepository _categoryRepository;
 
-        public CategoryController(ApplicationDbContext db)
+        public CategoryController(ICategoryRepository categoryRepository)
         {
-            _db = db;
+            _categoryRepository = categoryRepository;
         }
 
         public IActionResult Index()
         {
-            IEnumerable<Category> categories = _db.Category;
+            IEnumerable<Category> categories = _categoryRepository.GetAll();
             return View(categories);
         }
 
@@ -36,8 +36,8 @@ namespace GraniteHouseV2.Controllers
         {
             if (ModelState.IsValid)
             {
-                _db.Category.Add(category);
-                _db.SaveChanges();
+                _categoryRepository.Add(category);
+                _categoryRepository.Save();
                 return RedirectToAction("Index");
             }
             return View(category);
@@ -50,7 +50,7 @@ namespace GraniteHouseV2.Controllers
             {
                 return NotFound();
             }
-            var categoryObj = _db.Category.Find(id);
+            var categoryObj = _categoryRepository.Find(id.GetValueOrDefault());
             if (categoryObj == null)
             {
                 return NotFound();
@@ -65,8 +65,8 @@ namespace GraniteHouseV2.Controllers
         {
             if (ModelState.IsValid)
             {
-                _db.Category.Update(category);
-                _db.SaveChanges();
+                _categoryRepository.Update(category);
+                _categoryRepository.Save();
                 return RedirectToAction("Index");
             }
             return View(category);
@@ -79,7 +79,7 @@ namespace GraniteHouseV2.Controllers
             {
                 return NotFound();
             }
-            var categoryObj = _db.Category.Find(id);
+            var categoryObj = _categoryRepository.Find(id.GetValueOrDefault());
             if (categoryObj == null)
             {
                 return NotFound();
@@ -92,13 +92,13 @@ namespace GraniteHouseV2.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int? CategoryId)
         {
-            var categoryObj = _db.Category.Find(CategoryId);
+            var categoryObj = _categoryRepository.Find(CategoryId.GetValueOrDefault());
             if (categoryObj == null)
             {
                 return NotFound();
             }
-            _db.Category.Remove(categoryObj);
-            _db.SaveChanges();
+            _categoryRepository.Remove(categoryObj);
+            _categoryRepository.Save();
             return RedirectToAction("Index");
         }
     }
