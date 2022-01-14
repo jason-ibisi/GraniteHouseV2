@@ -9,5 +9,8 @@
         public const string CustomerRole = "Customer";
 
         public const string AdminEmail = "twista009@yahoo.com";
+
+        public const string CategoryName = "Category";
+        public const string ApplicationTypeName = "ApplicationType";
     }
 }
