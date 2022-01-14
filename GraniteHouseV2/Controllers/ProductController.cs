@@ -1,4 +1,4 @@
-﻿using GraniteHouseV2_DataAccess;
+﻿using GraniteHouseV2_DataAccess.Repository.IRepository;
 using GraniteHouseV2_Models;
 using GraniteHouseV2_Models.ViewModels;
 using GraniteHouseV2_Utility;
@@ -6,32 +6,28 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace GraniteHouseV2.Controllers
 {
     [Authorize(Roles = AppConstants.AdminRole)]
     public class ProductController : Controller
     {
-        private readonly ApplicationDbContext _db;
+        private readonly IProductRepository _productRepository;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public ProductController(ApplicationDbContext db, IWebHostEnvironment webHostEnvironment)
+        public ProductController(IProductRepository productRepository, IWebHostEnvironment webHostEnvironment)
         {
-            _db = db;
+            _productRepository = productRepository;
             _webHostEnvironment = webHostEnvironment;
         }
 
         // GET: ProductController
         public IActionResult Index()
         {
-            IEnumerable<Product> productList = _db.Product.Include(x => x.Category).Include(a => a.ApplicationType);
-
+            IEnumerable<Product> productList = _productRepository.GetAll(includeProperties:"Category,ApplicationType");
             return View(productList);
         }
 
@@ -40,14 +36,8 @@ namespace GraniteHouseV2.Controllers
         {
             ProductVM productVM = new() {
                 Product = new Product(),
-                CategorySelectList = _db.Category.Select(i => new SelectListItem {
-                    Text = i.Name,
-                    Value = i.CategoryId.ToString()
-                }),
-                ApplicationTypeSelectList = _db.ApplicationType.Select(i => new SelectListItem { 
-                    Text = i.Name,
-                    Value = i.ApplicationTypeId.ToString()
-                })
+                CategorySelectList = _productRepository.GetAllDropdownList(AppConstants.CategoryName),
+                ApplicationTypeSelectList = _productRepository.GetAllDropdownList(AppConstants.ApplicationTypeName)
             };
 
             if (id == null)
@@ -55,7 +45,7 @@ namespace GraniteHouseV2.Controllers
                 return View(productVM);
             }
 
-            productVM.Product = _db.Product.Find(id);
+            productVM.Product = _productRepository.Find(id.GetValueOrDefault());
             if (productVM.Product == null)
             {
                 return NotFound();
@@ -88,12 +78,12 @@ namespace GraniteHouseV2.Controllers
 
                     productVM.Product.Image = fileName + fileExtension;
 
-                    _db.Product.Add(productVM.Product);
+                    _productRepository.Add(productVM.Product);
                 }
                 else
                 {
                     //Updating a product
-                    var productFromDb = _db.Product.AsNoTracking().FirstOrDefault(x => x.ProductId == productVM.Product.ProductId);
+                    var productFromDb = _productRepository.FirstOrDefault(x => x.ProductId == productVM.Product.ProductId, isTracking: false);
 
                     if (productFromDb != null)
                     {
@@ -124,26 +114,17 @@ namespace GraniteHouseV2.Controllers
                             productVM.Product.Image = productFromDb.Image;
                         }
 
-                        _db.Product.Update(productVM.Product);
+                        _productRepository.Update(productVM.Product);
                     }
                 }
 
-                _db.SaveChanges();
+                _productRepository.Save();
 
                 return RedirectToAction(nameof(Index));
             }
 
-            productVM.CategorySelectList = _db.Category.Select(i => new SelectListItem
-            {
-                Text = i.Name,
-                Value = i.CategoryId.ToString()
-            });
-
-            productVM.ApplicationTypeSelectList = _db.ApplicationType.Select(i => new SelectListItem
-            {
-                Text = i.Name,
-                Value = i.ApplicationTypeId.ToString()
-            });
+            productVM.CategorySelectList = _productRepository.GetAllDropdownList(AppConstants.CategoryName);
+            productVM.ApplicationTypeSelectList = _productRepository.GetAllDropdownList(AppConstants.ApplicationTypeName);
 
             return View(productVM);
         }
@@ -155,8 +136,7 @@ namespace GraniteHouseV2.Controllers
             {
                 return NotFound();
             }
-            Product product = _db.Product.Include(p => p.Category).Include(a => a.ApplicationType)
-                .Where(p => p.ProductId == id).FirstOrDefault();
+            Product product = _productRepository.FirstOrDefault(p => p.ProductId == id, includeProperties: "Category,ApplicationType");
             if (product == null)
             {
                 return NotFound();
@@ -171,13 +151,13 @@ namespace GraniteHouseV2.Controllers
         {
             string webRootPath = _webHostEnvironment.WebRootPath;
 
-            var productObj = _db.Product.Find(productId);
+            var productObj = _productRepository.Find(productId.GetValueOrDefault());
             if (productObj == null)
             {
                 return NotFound();
             }
-            _db.Product.Remove(productObj);
-            _db.SaveChanges();
+            _productRepository.Remove(productObj);
+            _productRepository.Save();
 
             // Remove image
             string uploadPath = webRootPath + AppConstants.ImagePath;
