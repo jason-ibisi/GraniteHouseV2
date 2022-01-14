@@ -41,6 +41,7 @@ namespace GraniteHouseV2
                 options.Cookie.IsEssential = true;
             });
             services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IApplicationTypeRepository, ApplicationTypeRepository>();
             services.AddControllersWithViews();
         }
 

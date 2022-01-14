@@ -1,4 +1,4 @@
-﻿using GraniteHouseV2_DataAccess;
+﻿using GraniteHouseV2_DataAccess.Repository.IRepository;
 using GraniteHouseV2_Models;
 using GraniteHouseV2_Utility;
 using Microsoft.AspNetCore.Authorization;
@@ -10,17 +10,16 @@ namespace GraniteHouseV2.Controllers
     [Authorize(Roles = AppConstants.AdminRole)]
     public class ApplicationTypeController : Controller
     {
-        private readonly ApplicationDbContext _db;
+        private readonly IApplicationTypeRepository _applicationTypeRepository;
 
-        public ApplicationTypeController(ApplicationDbContext db)
+        public ApplicationTypeController(IApplicationTypeRepository applicationTypeRepository)
         {
-            _db = db;
+            _applicationTypeRepository = applicationTypeRepository;
         }
 
         public IActionResult Index()
         {
-            IEnumerable<ApplicationType> applicationTypes = _db.ApplicationType;
-
+            IEnumerable<ApplicationType> applicationTypes = _applicationTypeRepository.GetAll();
             return View(applicationTypes);
         }
 
@@ -34,9 +33,8 @@ namespace GraniteHouseV2.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(ApplicationType applicationType)
         {
-            _db.ApplicationType.Add(applicationType);
-            _db.SaveChanges();
-
+            _applicationTypeRepository.Add(applicationType);
+            _applicationTypeRepository.Save();
             return RedirectToAction("Index");
         }
 
@@ -47,7 +45,7 @@ namespace GraniteHouseV2.Controllers
             {
                 return NotFound();
             }
-            var applicationTypeObj = _db.ApplicationType.Find(id);
+            var applicationTypeObj = _applicationTypeRepository.Find(id.GetValueOrDefault());
             if(applicationTypeObj == null)
             {
                 return NotFound();
@@ -61,8 +59,8 @@ namespace GraniteHouseV2.Controllers
         {
             if (ModelState.IsValid)
             {
-                _db.ApplicationType.Update(applicationType);
-                _db.SaveChanges();
+                _applicationTypeRepository.Update(applicationType);
+                _applicationTypeRepository.Save();
                 return RedirectToAction("Index");
             }
             return View(applicationType);
@@ -75,7 +73,7 @@ namespace GraniteHouseV2.Controllers
             {
                 return NotFound();
             }
-            var applicationTypeObj = _db.ApplicationType.Find(id);
+            var applicationTypeObj = _applicationTypeRepository.Find(id.GetValueOrDefault());
             if (applicationTypeObj == null)
             {
                 return NotFound();
@@ -87,13 +85,13 @@ namespace GraniteHouseV2.Controllers
         [HttpPost]
         public IActionResult DeleteConfirmed(int? applicationTypeId)
         {
-            var applicationTypeObj = _db.ApplicationType.Find(applicationTypeId);
+            var applicationTypeObj = _applicationTypeRepository.Find(applicationTypeId.GetValueOrDefault());
             if (applicationTypeObj == null)
             {
                 return NotFound();
             }
-            _db.ApplicationType.Remove(applicationTypeObj);
-            _db.SaveChanges();
+            _applicationTypeRepository.Remove(applicationTypeObj);
+            _applicationTypeRepository.Save();
             return RedirectToAction("Index");
         }
     }
