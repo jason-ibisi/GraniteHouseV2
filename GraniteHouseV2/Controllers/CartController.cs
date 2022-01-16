@@ -29,7 +29,9 @@ namespace GraniteHouseV2.Controllers
         [BindProperty]
         public ProductUserVM ProductUserVM { get; set; }
 
-        public CartController(IProductRepository productRepository, IApplicationUserRepository applicationUserRepository, IInquiryHeaderRepository inquiryHeaderRepository, IInquiryDetailRepository inquiryDetailRepository,  IWebHostEnvironment webHostEnvironment, IEmailSender emailSender)
+        public CartController(IProductRepository productRepository, IApplicationUserRepository applicationUserRepository, 
+            IInquiryHeaderRepository inquiryHeaderRepository, IInquiryDetailRepository inquiryDetailRepository,  
+            IWebHostEnvironment webHostEnvironment, IEmailSender emailSender)
         {
             _productRepository = productRepository;
             _applicationUserRepository = applicationUserRepository;
