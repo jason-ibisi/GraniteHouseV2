@@ -1,9 +1,8 @@
-﻿using GraniteHouseV2_DataAccess;
+﻿using GraniteHouseV2_DataAccess.Repository.IRepository;
 using GraniteHouseV2_Models;
 using GraniteHouseV2_Models.ViewModels;
 using GraniteHouseV2_Utility;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,20 +13,22 @@ namespace GraniteHouseV2.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly ApplicationDbContext _db;
+        private readonly IProductRepository _productRepository;
+        private readonly ICategoryRepository _categoryRepository;
 
-        public HomeController(ILogger<HomeController> logger, ApplicationDbContext db)
+        public HomeController(ILogger<HomeController> logger, IProductRepository productRepository, ICategoryRepository categoryRepository)
         {
             _logger = logger;
-            _db = db;
+            _productRepository = productRepository;
+            _categoryRepository = categoryRepository;
         }
 
         public IActionResult Index()
         {
             HomeVM homeVM = new HomeVM()
             {
-                Products = _db.Product.Include(x => x.Category).Include(x => x.ApplicationType),
-                Categories = _db.Category
+                Products = _productRepository.GetAll(includeProperties: "Category,ApplicationType"),
+                Categories = _categoryRepository.GetAll()
             };
             return View(homeVM);
         }
@@ -43,8 +44,7 @@ namespace GraniteHouseV2.Controllers
 
             DetailsVM detailsVM = new DetailsVM()
             {
-                Product = _db.Product.Include(x => x.Category).Include(x => x.ApplicationType)
-                    .Where(x => x.ProductId == id).FirstOrDefault(),
+                Product = _productRepository.FirstOrDefault(p => p.ProductId == id, includeProperties: "Category,ApplicationType"),
                 ExistsInCart = shoppingCartList.Where(x => x.ProductId == id).Any()
             };
 
