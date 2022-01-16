@@ -1,6 +1,5 @@
 ﻿using GraniteHouseV2_DataAccess.Repository.IRepository;
 using GraniteHouseV2_Models;
-using System.Security.Claims;
 
 namespace GraniteHouseV2_DataAccess.Repository
 {
@@ -19,12 +18,8 @@ namespace GraniteHouseV2_DataAccess.Repository
 
             if (inquiryHeaderObjFromDb != null)
             {
-                // get currently logged on user
-                var claimsIdentity = (ClaimsIdentity)ClaimsPrincipal.Current.Identity;
-                var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-
-                inquiryHeaderObjFromDb.ApplicationUserId = claim.Value;
-                inquiryHeaderObjFromDb.FullName = claimsIdentity.Name;
+                inquiryHeaderObjFromDb.ApplicationUserId = inquiryHeader.ApplicationUserId;
+                inquiryHeaderObjFromDb.FullName = inquiryHeader.FullName;
                 inquiryHeaderObjFromDb.Email = inquiryHeader.Email;
                 inquiryHeaderObjFromDb.InquiryDate = inquiryHeader.InquiryDate;
                 inquiryHeaderObjFromDb.InquiryId = inquiryHeader.InquiryId;
