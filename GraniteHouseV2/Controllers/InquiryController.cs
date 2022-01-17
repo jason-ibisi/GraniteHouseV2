@@ -1,6 +1,9 @@
 ﻿using GraniteHouseV2_DataAccess.Repository.IRepository;
+using GraniteHouseV2_Models;
 using GraniteHouseV2_Models.ViewModels;
+using GraniteHouseV2_Utility;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace GraniteHouseV2.Controllers
 {
@@ -32,6 +35,34 @@ namespace GraniteHouseV2.Controllers
             };
 
             return View(InquiryVM);
+        }
+
+        /// <summary>
+        ///     Add the products from inquiry to the ShoppingCart
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Details()
+        {
+            List<ShoppingCart> shoppingCartList = new List<ShoppingCart>();
+            InquiryVM.InquiryDetail = _inquiryDetailRepository.GetAll(i => i.InquiryHeaderId == InquiryVM.InquiryHeader.InquiryId);
+
+            // add to shopping cart list
+            foreach (var productDetail in InquiryVM.InquiryDetail)
+            {
+                ShoppingCart shoppingCartItem = new ShoppingCart() { 
+                    ProductId = productDetail.ProductId
+                };
+                shoppingCartList.Add(shoppingCartItem);
+            }
+
+            // add shopping cart to session
+            HttpContext.Session.Remove(AppConstants.SessionCart);
+            HttpContext.Session.Set(AppConstants.SessionCart, shoppingCartList);
+            HttpContext.Session.Set(AppConstants.SessionInquiryId, InquiryVM.InquiryHeader.InquiryId);
+
+            return RedirectToAction("Index", "Cart");
         }
 
         #region API CALLS
