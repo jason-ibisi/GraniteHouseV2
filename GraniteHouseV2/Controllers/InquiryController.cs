@@ -2,11 +2,13 @@
 using GraniteHouseV2_Models;
 using GraniteHouseV2_Models.ViewModels;
 using GraniteHouseV2_Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
 namespace GraniteHouseV2.Controllers
 {
+    [Authorize(Roles = AppConstants.AdminRole)]
     public class InquiryController : Controller
     {
         private readonly IInquiryHeaderRepository _inquiryHeaderRepository;
@@ -63,6 +65,24 @@ namespace GraniteHouseV2.Controllers
             HttpContext.Session.Set(AppConstants.SessionInquiryId, InquiryVM.InquiryHeader.InquiryId);
 
             return RedirectToAction("Index", "Cart");
+        }
+
+        /// <summary>
+        ///     Delete an Inquiry
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public IActionResult Delete()
+        {
+            InquiryHeader inquiryHeader = _inquiryHeaderRepository.FirstOrDefault(i => i.InquiryId == InquiryVM.InquiryHeader.InquiryId);
+            IEnumerable<InquiryDetail> inquiryDetails = _inquiryDetailRepository.GetAll(i => i.InquiryHeaderId == InquiryVM.InquiryHeader.InquiryId);
+
+            _inquiryDetailRepository.RemoveRange(inquiryDetails);
+            _inquiryHeaderRepository.Remove(inquiryHeader);
+
+            _inquiryHeaderRepository.Save();
+
+            return RedirectToAction(nameof(Index));
         }
 
         #region API CALLS
