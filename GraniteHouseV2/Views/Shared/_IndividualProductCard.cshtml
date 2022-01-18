@@ -7,7 +7,7 @@
         <div class="card-body px-0 pt-3 pb-1 row m-auto">
             <div class="col-7"><label class="float-start">@Model.Name</label></div>
             <div class="col-5"><label class="float-end"><span class="text-info h5">@string.Format(new System.Globalization.CultureInfo("en-US"), "{0:c0}", @Model.Price)</span> /sqft</label></div>
-            <img class="card-img-top img-fluid d-block px-0 mx-auto mb-3" src="@AppConstants.ImagePath@Model.Image" alt="Card image cap" />
+            <img class="card-img-top img-fluid d-block px-0 mx-auto my-3" src="@AppConstants.ImagePath@Model.Image" alt="Card image cap" />
             <div class="card-body p-1 px-3 row m-auto">
                 <div class="col-6">
                     <span class="badge p-2 border w-100 text-dark" style="background-color:lavenderblush">@Model.Category.Name</span>
