@@ -119,12 +119,14 @@ namespace GraniteHouseV2.Controllers
                 }
 
                 _productRepository.Save();
+                TempData[AppConstants.Success] = "Request completed successfully";
 
                 return RedirectToAction(nameof(Index));
             }
 
             productVM.CategorySelectList = _productRepository.GetAllDropdownList(AppConstants.CategoryName);
             productVM.ApplicationTypeSelectList = _productRepository.GetAllDropdownList(AppConstants.ApplicationTypeName);
+            TempData[AppConstants.Error] = "Error completing request";
 
             return View(productVM);
         }
@@ -168,6 +170,7 @@ namespace GraniteHouseV2.Controllers
                 System.IO.File.Delete(currentFilePath);
             }
 
+            TempData[AppConstants.Success] = "Product deleted successfully";
             return RedirectToAction(nameof(Index));
         }
     }

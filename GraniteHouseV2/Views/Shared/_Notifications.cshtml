@@ -1,0 +1,19 @@
+﻿@using GraniteHouseV2_Utility
+
+@if (TempData[AppConstants.Success] != null)
+{
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/toastr/build/toastr.min.js"></script>
+    <script type="text/javascript">
+        toastr.success('@TempData[AppConstants.Success]');
+    </script>
+}
+
+@if (TempData[AppConstants.Error] != null)
+{
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/toastr/build/toastr.min.js"></script>
+    <script type="text/javascript">
+        toastr.error('@TempData[AppConstants.Error]');
+    </script>
+}

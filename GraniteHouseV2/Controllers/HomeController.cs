@@ -62,6 +62,8 @@ namespace GraniteHouseV2.Controllers
             }
             shoppingCartList.Add(new ShoppingCart { ProductId = id });
             HttpContext.Session.Set(AppConstants.SessionCart, shoppingCartList);
+            TempData[AppConstants.Success] = "Product added to cart successfully";
+            
             return RedirectToAction(nameof(Index));
         }
 
@@ -82,6 +84,7 @@ namespace GraniteHouseV2.Controllers
             }
 
             HttpContext.Session.Set(AppConstants.SessionCart, shoppingCartList);
+            TempData[AppConstants.Success] = "Product removed from cart successfully";
             return RedirectToAction(nameof(Index));
         }
 

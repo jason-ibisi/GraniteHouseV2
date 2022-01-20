@@ -75,6 +75,7 @@ namespace GraniteHouseV2.Controllers
 
             // Set session variable again
             HttpContext.Session.Set(AppConstants.SessionCart, shoppingCartList);
+            TempData[AppConstants.Success] = "Product removed from cart successfully";
 
             return RedirectToAction(nameof(Index));
         }
@@ -172,6 +173,7 @@ namespace GraniteHouseV2.Controllers
                 _inquiryDetailRepository.Add(inquiryDetail);
             }
             _inquiryDetailRepository.Save();
+            TempData[AppConstants.Success] = "Inquiry submitted successfully";
 
             return RedirectToAction(nameof(ShoppingCartInquiryConfirmation));
         }
