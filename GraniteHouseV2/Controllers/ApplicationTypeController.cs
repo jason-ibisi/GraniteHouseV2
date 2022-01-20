@@ -33,9 +33,15 @@ namespace GraniteHouseV2.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(ApplicationType applicationType)
         {
-            _applicationTypeRepository.Add(applicationType);
-            _applicationTypeRepository.Save();
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                _applicationTypeRepository.Add(applicationType);
+                _applicationTypeRepository.Save();
+                TempData[AppConstants.Success] = "Application Type created successfully";
+                return RedirectToAction("Index");
+            }
+            TempData[AppConstants.Error] = "Error while creating Application Type";
+            return View(applicationType);
         }
 
         // GET - EDIT
@@ -61,8 +67,10 @@ namespace GraniteHouseV2.Controllers
             {
                 _applicationTypeRepository.Update(applicationType);
                 _applicationTypeRepository.Save();
+                TempData[AppConstants.Success] = "Application Type updated successfully";
                 return RedirectToAction("Index");
             }
+            TempData[AppConstants.Error] = "Error while updating Application Type";
             return View(applicationType);
         }
 
@@ -88,10 +96,12 @@ namespace GraniteHouseV2.Controllers
             var applicationTypeObj = _applicationTypeRepository.Find(applicationTypeId.GetValueOrDefault());
             if (applicationTypeObj == null)
             {
+                TempData[AppConstants.Error] = "Error getting Application Type details";
                 return NotFound();
             }
             _applicationTypeRepository.Remove(applicationTypeObj);
             _applicationTypeRepository.Save();
+            TempData[AppConstants.Success] = "Application Type deleted successfully";
             return RedirectToAction("Index");
         }
     }

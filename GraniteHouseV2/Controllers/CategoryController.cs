@@ -38,8 +38,10 @@ namespace GraniteHouseV2.Controllers
             {
                 _categoryRepository.Add(category);
                 _categoryRepository.Save();
+                TempData[AppConstants.Success] = "Category created successfully";
                 return RedirectToAction("Index");
             }
+            TempData[AppConstants.Error] = "Error while creating category";
             return View(category);
         }
 
@@ -67,8 +69,10 @@ namespace GraniteHouseV2.Controllers
             {
                 _categoryRepository.Update(category);
                 _categoryRepository.Save();
+                TempData[AppConstants.Success] = "Category updated successfully";
                 return RedirectToAction("Index");
             }
+            TempData[AppConstants.Error] = "Error while updating category";
             return View(category);
         }
 
@@ -95,10 +99,12 @@ namespace GraniteHouseV2.Controllers
             var categoryObj = _categoryRepository.Find(CategoryId.GetValueOrDefault());
             if (categoryObj == null)
             {
+                TempData[AppConstants.Error] = "Error getting category details";
                 return NotFound();
             }
             _categoryRepository.Remove(categoryObj);
             _categoryRepository.Save();
+            TempData[AppConstants.Success] = "Category deleted successfully";
             return RedirectToAction("Index");
         }
     }

@@ -137,6 +137,7 @@
 
         function validateForm() {
             if (document.getElementById("files").value == "") {
+                event.preventDefault();
                 Swal.fire(
                     'Error!',
                     'Please upload an image!',

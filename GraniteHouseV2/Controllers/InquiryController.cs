@@ -63,6 +63,7 @@ namespace GraniteHouseV2.Controllers
             HttpContext.Session.Remove(AppConstants.SessionCart);
             HttpContext.Session.Set(AppConstants.SessionCart, shoppingCartList);
             HttpContext.Session.Set(AppConstants.SessionInquiryId, InquiryVM.InquiryHeader.InquiryId);
+            TempData[AppConstants.Success] = "Product added to shopping cart successfully";
 
             return RedirectToAction("Index", "Cart");
         }
@@ -82,6 +83,7 @@ namespace GraniteHouseV2.Controllers
 
             _inquiryHeaderRepository.Save();
 
+            TempData[AppConstants.Success] = "Inquiry deleted successfully";
             return RedirectToAction(nameof(Index));
         }
 
