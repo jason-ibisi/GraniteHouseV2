@@ -51,8 +51,13 @@ namespace GraniteHouseV2.Controllers
             return View(detailsVM);
         }
         
+        /// <summary>
+        ///     Add product to shopping cart
+        /// </summary>
+        /// <param name="id">product id</param>
+        /// <returns></returns>
         [HttpPost, ActionName("Details")]
-        public IActionResult DetailsPost(int id)
+        public IActionResult DetailsPost(int id, DetailsVM detailsVM)
         {
             List<ShoppingCart> shoppingCartList = new List<ShoppingCart>();
             if (HttpContext.Session.Get<IEnumerable<ShoppingCart>>(AppConstants.SessionCart) != null 
@@ -60,7 +65,7 @@ namespace GraniteHouseV2.Controllers
             {
                 shoppingCartList = HttpContext.Session.Get<List<ShoppingCart>>(AppConstants.SessionCart);
             }
-            shoppingCartList.Add(new ShoppingCart { ProductId = id });
+            shoppingCartList.Add(new ShoppingCart { ProductId = id, SqFt = detailsVM.Product.TempSqFt });
             HttpContext.Session.Set(AppConstants.SessionCart, shoppingCartList);
             TempData[AppConstants.Success] = "Product added to cart successfully";
             

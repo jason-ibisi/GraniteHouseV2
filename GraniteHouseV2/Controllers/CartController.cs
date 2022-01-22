@@ -54,7 +54,16 @@ namespace GraniteHouseV2.Controllers
 
             // get list of product ids in cart
             List<int> productInCart = shoppingCartList.Select(i => i.ProductId).ToList();
-            IEnumerable<Product> productsList = _productRepository.GetAll(p => productInCart.Contains(p.ProductId));
+            IEnumerable<Product> tempProductsList = _productRepository.GetAll(p => productInCart.Contains(p.ProductId));
+            IList<Product> productsList = new List<Product>();
+
+            // add sqft info to products from db
+            foreach (var cartItem in shoppingCartList )
+            {
+                Product tempProduct = tempProductsList.FirstOrDefault(p => p.ProductId == cartItem.ProductId);
+                tempProduct.TempSqFt = cartItem.SqFt;
+                productsList.Add(tempProduct);
+            }
 
             return View(productsList);
         }
@@ -83,17 +92,61 @@ namespace GraniteHouseV2.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ActionName("Index")]
-        public IActionResult SubmitCartForSummary()
+        public IActionResult SubmitCartForSummary(IEnumerable<Product> ProductList)
         {
+            // re-calculate the total cost incase of quantity change without update
+            IList<ShoppingCart> shoppingCartList = new List<ShoppingCart>();
+            foreach (Product product in ProductList)
+            {
+                // update the sqft 
+                shoppingCartList.Add(new ShoppingCart { ProductId = product.ProductId, SqFt = product.TempSqFt });
+            }
+
+            // update the session
+            HttpContext.Session.Set(AppConstants.SessionCart, shoppingCartList);
+
             return RedirectToAction(nameof(ShoppingCartSummary));
         }
 
         public IActionResult ShoppingCartSummary()
         {
-            // Get logged in user
-            var claimsIdentity = (ClaimsIdentity)User.Identity;
-            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-            // var userId = User.FindFirstValue(ClaimTypes.Name);
+            ApplicationUser applicationUser;
+            
+            // handle user details to display for inquiry
+            if (User.IsInRole(AppConstants.AdminRole))
+            {
+                int sessionInquiryId = HttpContext.Session.Get<int>(AppConstants.SessionInquiryId);
+                // check if inquiry has been set
+                if (sessionInquiryId != 0)
+                {
+                    // shopping cart has been loaded using inquiry
+                    InquiryHeader inquiryHeader = _inquiryHeaderRepository.FirstOrDefault(i => i.InquiryId == sessionInquiryId);
+                    
+                    // intialize applicationUser using user details from inquiryHeader
+                    applicationUser = new ApplicationUser()
+                    {
+                        FullName = inquiryHeader.FullName,
+                        Email = inquiryHeader.Email,
+                        PhoneNumber = inquiryHeader.PhoneNumber
+                    };
+                }
+                else
+                {
+                    // shopping cart has not been loaded from inquiry i.e an admin has loaded it
+                    // set applicationUser to blank so admin can fill the requester's detaiils
+                    applicationUser = new ApplicationUser();
+                }
+            }
+            else
+            {
+                // cart is being loaded by a normal user
+                // get logged in user
+                var claimsIdentity = (ClaimsIdentity)User.Identity;
+                var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+                // var userId = User.FindFirstValue(ClaimTypes.Name);
+
+                applicationUser = _applicationUserRepository.FirstOrDefault(u => u.Id == claim.Value);
+            }
 
             List<ShoppingCart> shoppingCartList = new List<ShoppingCart>();
 
@@ -110,9 +163,16 @@ namespace GraniteHouseV2.Controllers
 
             ProductUserVM = new ProductUserVM()
             {
-                ApplicationUser = _applicationUserRepository.FirstOrDefault(u => u.Id == claim.Value),
-                ProductList = productsList.ToList()
+                ApplicationUser = applicationUser
             };
+
+            // add sqft info to product and update productList in view model
+            foreach (var prodInCart in shoppingCartList)
+            {
+                Product tempProduct = productsList.FirstOrDefault(p => p.ProductId == prodInCart.ProductId);
+                tempProduct.TempSqFt = prodInCart.SqFt;
+                ProductUserVM.ProductList.Add(tempProduct);
+            }
 
             return View(ProductUserVM);
         }
@@ -182,6 +242,26 @@ namespace GraniteHouseV2.Controllers
         {
             HttpContext.Session.Clear();
             return View();
+        }
+
+        /// <summary>
+        ///     Update the shopping cart 
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult UpdateCart(IEnumerable<Product> ProductList)
+        {
+            IList<ShoppingCart> shoppingCartList = new List<ShoppingCart>();
+            foreach (Product product in ProductList)
+            {
+                // update the sqft 
+                shoppingCartList.Add(new ShoppingCart { ProductId = product.ProductId, SqFt = product.TempSqFt });
+            }
+
+            // update the session
+            HttpContext.Session.Set(AppConstants.SessionCart, shoppingCartList);
+            return RedirectToAction(nameof(Index));
         }
     }
 }
