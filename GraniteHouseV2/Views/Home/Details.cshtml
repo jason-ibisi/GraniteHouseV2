@@ -34,7 +34,25 @@
 
                                         <p class="text-secondary">@Html.Raw(Model.Product.Description)</p>
                                     </div>
-
+                                    @if (User.IsInRole(AppConstants.AdminRole))
+                                    {
+                                        <div class="row">
+                                            <div class="col-sm-12 col-md-1">
+                                                <p class="">SqFt</p>
+                                            </div> 
+                                            <div class="col-sm-12 col-md-11">
+                                                @if (Model.ExistsInCart)
+                                                {
+                                                    <input asp-for="@Model.Product.TempSqFt" disabled class="form-control" />
+                                                }
+                                                else
+                                                {
+                                                    <input asp-for="@Model.Product.TempSqFt" class="form-control" />
+                                                }
+                                            </div>
+                                            <span asp-validation-for="@Model.Product.TempSqFt" class="text-danger"></span>
+                                        </div>  
+                                    }
                                 </div>
                             </div>
                         </div>

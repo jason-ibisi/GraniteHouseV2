@@ -4,14 +4,16 @@ using GraniteHouseV2_DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GraniteHouseV2_DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220122183359_AddOrderHeaderAndDetailToDB")]
+    partial class AddOrderHeaderAndDetailToDB
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -110,7 +112,7 @@ namespace GraniteHouseV2_DataAccess.Migrations
 
             modelBuilder.Entity("GraniteHouseV2_Models.OrderDetail", b =>
                 {
-                    b.Property<int>("OrderDetailId")
+                    b.Property<int>("OrderDetailsId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -127,7 +129,7 @@ namespace GraniteHouseV2_DataAccess.Migrations
                     b.Property<int>("SqFt")
                         .HasColumnType("int");
 
-                    b.HasKey("OrderDetailId");
+                    b.HasKey("OrderDetailsId");
 
                     b.HasIndex("OrderHeaderId");
 
