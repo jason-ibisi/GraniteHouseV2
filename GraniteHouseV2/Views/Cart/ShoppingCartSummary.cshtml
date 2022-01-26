@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<form method="post">
+<form method="post" id="payment-form">
     <br />
     <div class="backgroundWhiteBorder">
         <div class="container">
@@ -103,33 +103,50 @@
                                         @{ var orderTotal = 0.0; }
                                         @for (int i = 0; i < Model.ProductList.Count(); i++)
                                         {
-                                            <input type="hidden" asp-for="@Model.ProductList[i].ProductId"/>
-                                            <input type="hidden" asp-for="@Model.ProductList[i].Name"/>
+                                            <input type="hidden" asp-for="@Model.ProductList[i].ProductId" />
+                                            <input type="hidden" asp-for="@Model.ProductList[i].Name" />
+                                            <input type="hidden" asp-for="@Model.ProductList[i].Price" />
+                                            <input type="hidden" asp-for="@Model.ProductList[i].TempSqFt" />
                                             <li class="list-group-item d-flex justify-content-between">
                                                 <div>
                                                     <h6 class="my-0">@Model.ProductList[i].Name</h6>
-                                                    @if (User.IsInRole(GraniteHouseV2_Utility.AppConstants.AdminRole)) { 
+                                                    @if (User.IsInRole(GraniteHouseV2_Utility.AppConstants.AdminRole))
+                                                    {
                                                         <small class="text-muted">Sqft: @Model.ProductList[i].TempSqFt</small>
                                                         <small> | </small>
                                                     }
                                                     <small class="text-muted">Price per Sqft: $@Model.ProductList[i].Price</small>
                                                 </div>
-                                                @if (User.IsInRole(GraniteHouseV2_Utility.AppConstants.AdminRole)) { 
+                                                @if (User.IsInRole(GraniteHouseV2_Utility.AppConstants.AdminRole))
+                                                {
                                                     <span class="text-muted">$@(Model.ProductList[i].Price * Model.ProductList[i].TempSqFt)</span>
                                                 }
                                             </li>
                                             orderTotal += @Model.ProductList[i].Price * @Model.ProductList[i].TempSqFt;
                                         }
                                         @if (User.IsInRole(GraniteHouseV2_Utility.AppConstants.AdminRole))
-                                            {
-                                                var isoCurrency = new System.Globalization.RegionInfo(new System.Globalization.CultureInfo("en-US").LCID).ISOCurrencySymbol;
-                                                <li class="list-group-item d-flex justify-content-between bg-light">
-                                                    <small class="text-black">Total (@isoCurrency)</small>
-                                                    <strong class="text-black">$@orderTotal</strong>
-                                                </li>
-                                            }
+                                        {
+                                            var isoCurrency = new System.Globalization.RegionInfo(new System.Globalization.CultureInfo("en-US").LCID).ISOCurrencySymbol;
+                                            <li class="list-group-item d-flex justify-content-between bg-light">
+                                                <small class="text-black">Total (@isoCurrency)</small>
+                                                <strong class="text-black">$@orderTotal</strong>
+                                            </li>
+                                        }
                                     </ul>
                                 </div>
+
+                                @if (User.IsInRole(GraniteHouseV2_Utility.AppConstants.AdminRole))
+                                {
+                                    <!-- Braintree elements -->
+                                    <div class="col-12">
+                                        <div class="wrapper">
+                                            <div class="checkout container px-0">
+                                                <div id="dropin-container"></div>
+                                                <input type="hidden" id="nonce" name="payment_method_nonce" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
                             </div>
                         </div>
                     </div>
@@ -156,4 +173,41 @@
 
 @section Scripts{
     <partial name="_ValidationScriptsPartial" />
+    <script src="https://js.braintreegateway.com/web/dropin/1.32.1/js/dropin.min.js"></script>
+
+    <script>
+        const CLIENT_TOKEN_FROM_SERVER = "@ViewBag.ClientToken";
+        const form = document.getElementById('payment-form');
+
+        // Step two: create a dropin instance using that container (or a string
+        //  that functions as a query selector such as `#dropin-container`)
+        braintree.dropin.create({
+            container: document.getElementById('dropin-container'),
+            // ...plus remaining configuration
+            authorization: CLIENT_TOKEN_FROM_SERVER
+        }, (error, dropinInstance) => {
+            // Use `dropinInstance` here
+            // Methods documented at https://braintree.github.io/braintree-web-drop-in/docs/current/Dropin.html
+
+            if (error) console.error(error);
+
+            form.addEventListener('submit', event => {
+                event.preventDefault();
+
+                dropinInstance.requestPaymentMethod((error, payload) => {
+                    if (error) console.error(error);
+
+                    // Step four: when the user is ready to complete their
+                    //   transaction, use the dropinInstance to get a payment
+                    //   method nonce for the user's selected payment method, then add
+                    //   it a the hidden field before submitting the complete form to
+                    //   a server-side integration
+                    document.getElementById('nonce').value = payload.nonce;
+                    form.submit();
+                });
+            });
+        });
+
+    </script>
+
 }

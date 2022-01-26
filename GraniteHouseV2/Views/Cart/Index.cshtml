@@ -13,7 +13,7 @@
         <br />
         <div class="backgroundWhiteBorder">
             <div class="container row">
-                <div class="col -8">
+                <div class="col">
                     <div class="card mt-4">
                         <div class="card-header bg-dark text-light mx-0 row container">
                             <div class="col-6">
@@ -21,6 +21,7 @@
                                 Shopping Cart
                             </div>
                             <div class="col-6 text-end">
+                                <a asp-action="Clear" asp-controller="Cart" class="btn btn-outline-warning btn-sm">Clear Cart</a>
                                 <a asp-action="Index" asp-controller="Home" class="btn btn-outline-info btn-sm">Continue Shopping</a>
                             </div>
                         </div>
@@ -139,7 +140,14 @@
 }
 else
 {
-    <p>Cart is empty. Please add items to cart.</p>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <img src="~/images/empty-cart.png" class="img-fluid d-block mx-auto" alt="Empty Cart" width="30%" />
+                <p class="text-center fw-bold">Cart is empty. Please add items to cart.</p>
+            </div>
+        </div>
+    </div>
 }
 
 
