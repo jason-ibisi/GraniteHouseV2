@@ -51,6 +51,12 @@ namespace GraniteHouseV2
             services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
             services.AddScoped<IOrderHeaderRepository, OrderHeaderRepository>();
             services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
+
+            services.AddAuthentication().AddFacebook(Options => {
+                Options.AppId = Configuration.GetSection("Facebook").GetValue<string>("AppId");
+                Options.AppSecret = Configuration.GetSection("Facebook").GetValue<string>("AppSecret");
+            });
+
             services.AddControllersWithViews();
         }
 
