@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
+﻿using GraniteHouseV2_Models;
+using GraniteHouseV2_Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -13,6 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
+using System.Text;
+using System.Text.Encodings.Web;
+using System.Threading.Tasks;
 
 namespace GraniteHouseV2.Areas.Identity.Pages.Account
 {
@@ -51,6 +50,16 @@ namespace GraniteHouseV2.Areas.Identity.Pages.Account
             [Required]
             [EmailAddress]
             public string Email { get; set; }
+
+            [Required]
+            [StringLength(255, ErrorMessage = "The name cannot be more than 255 characters long")]
+            [Display(Name = "Full Name")]
+            public string FullName { get; set; }
+
+            [Required]
+            [DataType(DataType.PhoneNumber)]
+            [Display(Name = "Phone Number")]
+            public string PhoneNumber { get; set; }
         }
 
         public IActionResult OnGetAsync()
@@ -101,7 +110,8 @@ namespace GraniteHouseV2.Areas.Identity.Pages.Account
                 {
                     Input = new InputModel
                     {
-                        Email = info.Principal.FindFirstValue(ClaimTypes.Email)
+                        Email = info.Principal.FindFirstValue(ClaimTypes.Email),
+                        FullName = info.Principal.FindFirstValue(ClaimTypes.Name),
                     };
                 }
                 return Page();
@@ -121,11 +131,15 @@ namespace GraniteHouseV2.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                var user = new IdentityUser { UserName = Input.Email, Email = Input.Email };
+                // Create new ApplicationUser which extends IdentityUser
+                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email, FullName = Input.FullName, PhoneNumber = Input.PhoneNumber };
 
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
+                    // Add all users using external login to customer role
+                    await _userManager.AddToRoleAsync(user, AppConstants.CustomerRole);
+
                     result = await _userManager.AddLoginAsync(user, info);
                     if (result.Succeeded)
                     {

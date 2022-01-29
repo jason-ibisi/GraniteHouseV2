@@ -65,10 +65,13 @@ namespace GraniteHouseV2.Areas.Identity.Pages.Account
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
 
+            [Required]
             [StringLength(255, ErrorMessage = "The name cannot be more than 255 characters long")]
             [Display(Name = "Full Name")]
             public string FullName { get; set; }
 
+            [Required]
+            [DataType(DataType.PhoneNumber)]
             [Display(Name = "Phone Number")]
             public string PhoneNumber { get; set; }
         }
