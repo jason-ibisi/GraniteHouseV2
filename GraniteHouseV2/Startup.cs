@@ -1,4 +1,5 @@
 using GraniteHouseV2_DataAccess;
+using GraniteHouseV2_DataAccess.Initializer;
 using GraniteHouseV2_DataAccess.Repository;
 using GraniteHouseV2_DataAccess.Repository.IRepository;
 using GraniteHouseV2_Utility;
@@ -51,6 +52,7 @@ namespace GraniteHouseV2
             services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
             services.AddScoped<IOrderHeaderRepository, OrderHeaderRepository>();
             services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
+            services.AddScoped<IDbInitializer, DbInitializer>();
 
             services.AddAuthentication().AddFacebook(Options => {
                 Options.AppId = Configuration.GetSection("Facebook").GetValue<string>("AppId");
@@ -61,7 +63,7 @@ namespace GraniteHouseV2
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IDbInitializer dbInitializer)
         {
             if (env.IsDevelopment())
             {
@@ -81,6 +83,8 @@ namespace GraniteHouseV2
             app.UseAuthentication();
 
             app.UseAuthorization();
+
+            dbInitializer.Initialize();
 
             app.UseSession();
 
