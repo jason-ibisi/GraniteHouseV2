@@ -32,7 +32,7 @@ namespace GraniteHouseV2_Models
         public virtual ApplicationType ApplicationType { get; set; }
 
         [NotMapped]
-        [Range(1, 10000)]
+        [Range(1, 10000, ErrorMessage = "SqFt must be greater than 0")]
         public int TempSqFt { get; set; }
     }
 }

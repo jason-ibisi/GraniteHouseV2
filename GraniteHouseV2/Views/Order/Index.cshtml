@@ -21,7 +21,7 @@
                             @Html.Editor("searchPhoneNumber", new { htmlAttributes = new { @class = "form-control", @placeholder = "Search by phone number" } })
                         </div>
                         <div class="col-3">
-                            @Html.DropDownListFor(s => s.Status, Model.StatusList, "--Order Status--", new { @class = "form-control" })
+                            @Html.DropDownListFor(s => s.Status, Model.StatusList, "--Order Status--", new { @id = "status", @class = "form-control" })
                         </div>
                     </div>
                     <div class="row pt-3">
@@ -39,7 +39,7 @@
 <hr />
 
 <div class="bg-white p-3">
-    <ejs-grid id="OrderGrid" dataSource="@Model.OrderList" allowFiltering="true" allowSorting="true" allowSelection="true" allowPaging="true">
+    <ejs-grid id="OrderGrid" dataSource="@Model.OrderList" height="300" allowFiltering="true" allowSorting="true" allowSelection="true" allowPaging="true" created="gridCreated">
         <e-grid-filtersettings type="Menu"></e-grid-filtersettings>
         <e-grid-selectionsettings persistSelection="true" type="Multiple" checkboxOnly="true"></e-grid-selectionsettings>
         <e-grid-pagesettings pageSize="5"></e-grid-pagesettings>
@@ -54,6 +54,14 @@
         </e-grid-columns>
     </ejs-grid>
 </div>
+
+<script>
+    function gridCreated() {
+        var grid = document.getElementById('OrderGrid').ej2_instances[0];
+        ej.popups.setSpinner({ type: 'Bootstrap' });
+        grid.showSpinner();
+    }
+</script>
 
 <script type="text/x-jsrender" id="orderHeaderId">
     <a rel="nofollow" href="Order/Details/${OrderHeaderId}" class="btn btn-primary">

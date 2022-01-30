@@ -15,7 +15,7 @@
                         Order Summary
                     </div>
                     <div class="col-6 text-end">
-                        <a class="btn btn-outline-info btn-sm">Back to Cart</a>
+                        <a asp-action="Index" class="btn btn-outline-info btn-sm">Back to Cart</a>
                     </div>
                 </div>
                 <div class="card-body">
@@ -32,7 +32,7 @@
                                         <label>Name</label>
                                     </div>
                                     <div class="col-9">
-                                        <input asp-for="@Model.ApplicationUser.FullName" type="text" class="form-control" />
+                                        <input asp-for="@Model.ApplicationUser.FullName" required type="text" class="form-control" />
                                         <span asp-validation-for="@Model.ApplicationUser.FullName" class="text-danger"></span>
                                     </div>
                                 </div>
@@ -156,11 +156,11 @@
                         <div class="col-12 col-md-5 offset-md-7">
                             @if (User.IsInRole(GraniteHouseV2_Utility.AppConstants.AdminRole))
                             {
-                                <button type="submit" class="btn btn-success form-control">Submit Order</button>
+                                <button type="submit" class="btn btn-success form-control" onclick="validateOrderInput();">Submit Order</button>
                             }
                             else
                             {
-                                <button type="submit" class="btn btn-primary form-control">Submit Inquiry</button>
+                                <button type="submit" class="btn btn-primary form-control" onclick="validateOrderInput();">Submit Inquiry</button>
                             }
                         </div>
                     </div>
@@ -176,6 +176,7 @@
     <script src="https://js.braintreegateway.com/web/dropin/1.32.1/js/dropin.min.js"></script>
 
     <script>
+        // Setup braintree
         const CLIENT_TOKEN_FROM_SERVER = "@ViewBag.ClientToken";
         const form = document.getElementById('payment-form');
 
@@ -208,6 +209,50 @@
             });
         });
 
+        function validateOrderInput() {
+            event.preventDefault();
+            const form = $('#payment-form');
+            if (form.valid()) {
+                form.submit();
+            }
+            else {
+                var validationErrors = form.validate();
+                var validationErrorsList = validationErrors.errorList;
+                if (validationErrorsList.length > 0) {
+                    switch (validationErrors.errorList[0].element.id) {
+                        case "ApplicationUser_FullName":
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Required information',
+                                text: 'Please enter a full name!'
+                            });
+                            break;
+                        case "ApplicationUser_Email":
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Required information',
+                                text: 'Please enter a valid email address!'
+                            });
+                            break;
+                        case "ApplicationUser_PhoneNumber":
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Required information',
+                                text: 'Please enter a phone number!'
+                            });
+                            break;
+                        default:
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oh no!',
+                                text: 'There\'s some error with the form. Please check all fields and try again!'
+                            });
+                            break;
+                    };
+                    return false;
+                }
+            }
+        }
     </script>
 
 }
