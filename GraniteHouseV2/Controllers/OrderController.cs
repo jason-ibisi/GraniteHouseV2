@@ -4,11 +4,13 @@ using GraniteHouseV2_Models;
 using GraniteHouseV2_Models.ViewModels;
 using GraniteHouseV2_Utility;
 using GraniteHouseV2_Utility.BrainTree;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 
 namespace GraniteHouseV2.Controllers
 {
+    [Authorize(Roles = AppConstants.AdminRole)]
     public class OrderController : Controller
     {
         private readonly IOrderHeaderRepository _orderHeaderRepository;

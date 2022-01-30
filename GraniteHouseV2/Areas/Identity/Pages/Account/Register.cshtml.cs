@@ -133,6 +133,7 @@ namespace GraniteHouseV2.Areas.Identity.Pages.Account
                         }
                         else
                         {
+                            TempData[AppConstants.Success] = user.FullName + " has been registered";
                             return RedirectToAction("Index");
                         }
                         return LocalRedirect(returnUrl);
