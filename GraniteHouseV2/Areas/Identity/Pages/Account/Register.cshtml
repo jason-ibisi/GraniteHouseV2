@@ -57,7 +57,6 @@ else
                             @if (User.IsInRole(AppConstants.AdminRole))
                             {
                                 <button type="submit" class="btn btn-warning mt-2 form-control">Register Admin User</button>
-
                             }
                             else
                             {
@@ -68,9 +67,11 @@ else
 
                     <section>
                         <div class="py-2">
-                            <hr />
-                            <h4 class="text-center text-info mb-3">or login using:</h4>
-                            @{
+                            @if (!User.IsInRole(AppConstants.AdminRole))
+                            {
+                                <hr />
+                                <h4 class="text-center text-info mb-3">or login using:</h4>
+
                                 if ((Model.ExternalLogins?.Count ?? 0) == 0)
                                 {
                                     <div>

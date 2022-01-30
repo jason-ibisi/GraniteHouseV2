@@ -1,4 +1,7 @@
-﻿namespace GraniteHouseV2_Utility
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+
+namespace GraniteHouseV2_Utility
 {
     public class AppConstants
     {
@@ -23,5 +26,12 @@
         public const string StatusShipped = "Shipped";
         public const string StatusCancelled = "Cancelled";
         public const string StatusRefunded = "Refunded";
+
+        public static IEnumerable<string> StatusList = new ReadOnlyCollection<string>(
+            new List<string>
+            {
+                StatusPending, StatusApproved, StatusInProcess, StatusShipped, StatusCancelled, StatusRefunded
+            });
+
     }
 }
