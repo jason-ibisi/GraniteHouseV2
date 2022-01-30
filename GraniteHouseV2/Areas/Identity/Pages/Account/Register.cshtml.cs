@@ -78,11 +78,6 @@ namespace GraniteHouseV2.Areas.Identity.Pages.Account
 
         public async Task OnGetAsync(string returnUrl = null)
         {
-            if (!await _roleManager.RoleExistsAsync(AppConstants.AdminRole)) 
-            {
-                await _roleManager.CreateAsync(new IdentityRole(AppConstants.AdminRole));
-                await _roleManager.CreateAsync(new IdentityRole(AppConstants.CustomerRole));
-            }
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
